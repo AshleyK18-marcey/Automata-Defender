@@ -1,0 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen&family=Syncopate:wght@400;700&display=swap');
+.gameTitle {
+    font-family: "Syncopate";
+    font-weight: 400;
+    font-style: normal;
+    font-size: 70px;
+  }
