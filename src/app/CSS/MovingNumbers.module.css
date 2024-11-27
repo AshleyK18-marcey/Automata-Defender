@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap');
+
+
+@keyframes seamlessScroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+.container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    background-color: black;
+    /* Optional background color for contrast */
+}
+
+.numbers {
+    display: inline-block;
+    white-space: nowrap;
+    /* Prevent line breaks */
+    font-family: "Silkscreen", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    /* Replace with your desired font */
+    color: green;
+    animation: seamlessScroll 10s linear infinite;
+    /* Adjust duration and speed */
+}
+
+.container .numbers:nth-child(2) {
+    position: absolute;
+    left: 100%;
+    animation: seamlessScroll 10s linear infinite;
+  }
