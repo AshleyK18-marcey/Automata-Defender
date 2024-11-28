@@ -10,29 +10,36 @@ export default function WelcomePage() {
   const navigateToAgentIntro = () => {
     router.push('/AgentIntroPage')
   }
+  const navigateToReview = () => {
+    router.push('/ReviewPage')
+  }
 
   return (
-    <>
-      <div>
+    <div className="flec flec-col min-h-screen">
+      <div className='relative'>
         <MovingNumbers />
       </div>
       <div>
-        <main>
-          <h1 className={styles.gameTitle}>Automata Defender</h1>
+        <main className="flex-grow flex flex-col justify-center items-center">
+          <h1 className={styles.gameTitle} >Automata </h1>
+          <h1 className={styles.gameTitle} >Defender </h1>
 
-          <div className="flex gap-4 items-center flex-col sm:flex-row">
-            <button onClick={navigateToAgentIntro} className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44">
+          <div className={styles.buttonsContainer}>
+            <button onClick={navigateToAgentIntro} className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">
               Start Game
+            </button>
+            <button onClick={navigateToReview} className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">
+              Review
             </button>
           </div>
         </main>
-        <div>
+        <div className='relative'>
           <MovingNumbers />
         </div>
-        <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
+        <footer className="text-white text-center p-4">
           Made by Ashley Kastler
         </footer>
       </div>
-    </>
+    </div>
   );
 }
