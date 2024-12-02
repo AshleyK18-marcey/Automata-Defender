@@ -1,8 +1,9 @@
+import DialogBox from "../components/DialogBox";
+
 export default function AgentIntroPage() {
-    return (
-      <div>
-        <h1>This is the Other Page</h1>
-      </div>
-    );
-  }
-  
+  return (
+    <div className="min-h-screen bg-black-100">
+      <DialogBox />
+    </div>
+  );
+}
