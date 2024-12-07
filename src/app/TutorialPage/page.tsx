@@ -1,12 +1,13 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import LanguageDefBox from '../components/LanguageDefBox';
-import CharacterArea from '../components/CharacterArea';
+import LanguageDefBox from '../Components/LanguageDefBox';
+import CharacterArea from '../Components/CharacterArea';
 import { generateLanguage } from '../utils'
-import CommunicationCenter from '../components/CommunicationCenter';
-import ReadyButton from '../components/ReadyButton';
-import MachineDisplay from '../components/MachineDisplay';
-import Toolbar from '../components/Toolbar';
+import CommunicationCenter from '../Components/CommunicationCenter';
+import ReadyButton from '../Components/ReadyButton';
+import MachineDisplay from '../Components/MachineDisplay';
+import Toolbar from '../Components/Draggable';
+import { DndContext } from '@dnd-kit/core';
 
 export default function Tutorial() {
 
@@ -25,13 +26,20 @@ export default function Tutorial() {
         "Once you are finished creating you machine, click the button on the bottom right that says Ready!"
     ];
     return (
-        <main className="min-h-screen bg-[url('/tut-background.avif')] bg-cover bg-center bg-no-repeat">
-            <LanguageDefBox languageDefinition={language} />
-            <MachineDisplay/>
-            <CharacterArea character='/Agent_Whiskers.png' dialog={dialogTexts} nextPage={navigateToTutorial}/>
-            <CommunicationCenter/>
-            <Toolbar/>
-            <ReadyButton/>
-        </main>
+        <DndContext>
+            <main className="min-h-screen bg-[url('/tut-background.avif')] bg-cover bg-center bg-no-repeat">
+                <LanguageDefBox languageDefinition={language} />
+                <MachineDisplay />
+                <CharacterArea character='/Agent_Whiskers.png' dialog={dialogTexts} nextPage={navigateToTutorial} />
+                <CommunicationCenter />
+                <ReadyButton />
+            </main>
+        </DndContext>
+
+
+
+
+
+
     );
 }

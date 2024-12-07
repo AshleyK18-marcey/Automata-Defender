@@ -5,7 +5,7 @@ import styles from '../CSS/fonts.module.css'
 import DialogBox from './DialogBox';
 
 type readyButtonProps = {
-    nextPage: () => void;
+    nextPage?: () => void;
 };
 
 

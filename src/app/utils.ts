@@ -15,3 +15,7 @@ export const generateLanguage = (difficulty: string): string => {
   }
   return 'none';
 }
+
+export const ItemTypes = {
+  STATE: 'state',
+};

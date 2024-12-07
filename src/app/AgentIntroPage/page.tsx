@@ -1,6 +1,6 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import DialogBox from "../components/DialogBox";
+import DialogBox from '../Components/DialogBox';
 import Image from "next/image";
 
 export default function AgentIntroPage() {
