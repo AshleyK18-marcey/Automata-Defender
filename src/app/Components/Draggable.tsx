@@ -1,22 +1,14 @@
 import React, { useState, useEffect, useMemo, CSSProperties } from 'react';
-import Image from 'next/image';
-import { ItemTypes } from '../utils';
-
-import styles from '../CSS/fonts.module.css'
-import DialogBox from './DialogBox';
 import { useDraggable } from '@dnd-kit/core';
+import { State, GridDotProps } from './Definitions';
 
-type DraggableStateProps = {
-  id: string,
-  label: string,
-  color: string,
 
-};
 
-const DraggableState = ({ id, label, color, }: DraggableStateProps) => {
+
+const DraggableState = ({ id, label, color, accept }: State) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id,
-    data: { label, color }
+    data: { label, color, accept }
   });
 
   const style = {
@@ -24,22 +16,26 @@ const DraggableState = ({ id, label, color, }: DraggableStateProps) => {
       ? `translate(${transform.x}px, ${transform.y}px)`
       : undefined,
     backgroundColor: color,
-    width: '50px',
-    height: '50px',
+    width: '100px',
+    height: '100px',
     borderRadius: '50%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     cursor: 'grab',
     fontWeight: 'bold',
-    color: 'white',
+    color: 'white'
+  };
+
+  const acceptStyle = {
+    ...style, border: '10px solid red'
   };
 
 
   return (
     <div
       ref={setNodeRef}
-      style={style}
+      style={accept ? acceptStyle : style}
       {...listeners}
       {...attributes}
     >

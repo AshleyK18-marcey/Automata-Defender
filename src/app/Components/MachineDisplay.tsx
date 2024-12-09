@@ -1,77 +1,95 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import Image from 'next/image';
-
-import styles from '../CSS/fonts.module.css'
-import DialogBox from './DialogBox';
-import { DndContext, DragEndEvent } from '@dnd-kit/core';
+import { DndContext } from '@dnd-kit/core';
 import GridDot from './GridDot';
 import DraggableState from './Draggable';
+import { State, GridDotProps } from './Definitions';
 
-type machineDisplayProps = {
+const MachineDisplay = (): JSX.Element => {
 
+    const generateGrid = (): GridDotProps[] => {
+        const startX = 710;
+        const startY = 348;
+        const gridSpacing = 126;
+        const grid: GridDotProps[] = [];
+        for (let row = 0; row < 3; row++) {
+            for (let col = 0; col < 5; col++) {
+                grid.push({
+                    id: `${row}-${col}`, // Unique ID for each dot
+                    x: startX + col * gridSpacing, // Calculate X position
+                    y: startY + row * gridSpacing, // Calculate Y position
+                    state: undefined,
+                });
+            }
+        }
+        return grid;
+    };
 
-};
-
-type State = {
-    id: string,
-    label: string,
-    color: string,
-};
-
-type GridDotProps = {
-    id: string,
-    x: number,
-    y: number,
-    // onDrop
-    state?: State
-
-};
-
-
-type DraggingItem = {
-    id: string;
-    label: string;
-    color: string;
-};
-
-
-
-const MachineDisplay = ({ }: machineDisplayProps): JSX.Element => {
-
-    const [states, setStates] = useState<State[]>([
-        { id: 'state-1', label: 'q1', color: 'blue' },
+    const [states, setState] = useState<State[]>([
+        { id: 'state-1', label: 'q1', color: 'blue', accept: false },
+        { id: 'accept-1', label: 'accept-1', color: 'green', accept: true }
     ]);
 
     const [grid, setGrid] = useState<GridDotProps[]>([
-        {id: '1', x: 550, y: 500, state: undefined }
-    ]
-    );
+        { id: '0', x: 570, y: 474, state: { id: '0', label: 'Start', color: 'blue', accept: false } },
+        ...generateGrid()
+    ]);
 
-    const [isDropped, setIsDropped] = useState(false);
 
-    /*const handleDragEnd = (id: string) => {
-        // Check if the dragged state is the last one in the toolbar
-        if (states.find((state) => state.id === id)) {
-            const newLabel = `q${states.length + 1}`;
-            const newState = {
-                id: `state-${states.length + 1}`,
-                label: newLabel,
-                color: 'blue',
-            };
-            setStates((prev) => [...prev, newState]);
-        }
-    };*/
+    const ToolBar: JSX.Element = (
+        <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2">
+            <div className="max-w-4xl mx-auto flex flex-col gap-4 bg-black border border-white text-white p-4" style={{ width: '900px', height: '170px' }}>
+                <div style={{ display: "flex", gap: "10px", alignItems: "center", justifyContent: "center", height: "100%" }}>
+                    {states.map((state) => (
+                        <DraggableState
+                            key={state.id}
+                            id={state.id}
+                            label={state.label}
+                            color={state.color}
+                            accept={state.accept}
+                        />
+                    ))}
+                </div>
+            </div>
+        </div>);
 
     const handleDragEnd = (event: any) => {
-        if (event.over && event.over.id === '1') {
-            console.log(event.active.id, event.active.data.current.label);
-            setIsDropped(true);
-            const newState: State = {id: event.active.id, label: event.active.data.current.label, color: event.active.data.current.color}
-            const newGrid: GridDotProps = {id: '1', x: 550, y: 500, state: newState };
-            setGrid([newGrid]);
-            console.log(isDropped);
+        if (event.over && !event.over.disabled) {
+            console.log(event.active.id, event.active.data.current.label, event.over.id);
+            const newGridState: State = {
+                id: event.active.id,
+                label: event.active.data.current.label,
+                color: event.active.data.current.color,
+                accept: event.active.data.current.accept
+            }
+            setGrid((prevGrid) => prevGrid.map((dot) => dot.id === event.over.id ? { ...dot, state: newGridState } : dot));
+
+            setState((prevStates) => {
+                // Remove the dragged state
+                const filteredStates = prevStates.filter(
+                    (state) => state.id !== event.active.id
+                );
+
+                const oldId = parseInt(event.active.id.split('-')[1]);
+                const oldAccept = event.active.data.current.accept;
+                const oldColor = event.active.data.current.color;
+
+                const newId = `state-${oldId + 1}`;
+                const newLabel = oldAccept ? `accept-${oldId + 1}` : `q${oldId + 1}`;
+
+                // Add the new state
+                const newState: State = {
+                    id: newId,
+                    label: newLabel,
+                    color: oldColor,
+                    accept: oldAccept,
+                };
+
+                const sort = oldAccept ? [...filteredStates, newState] : [newState, ...filteredStates];
+
+                return sort;
+            });
+            console.log(states);
         }
-        console.log(isDropped);
     }
 
 
@@ -79,32 +97,18 @@ const MachineDisplay = ({ }: machineDisplayProps): JSX.Element => {
         <DndContext onDragEnd={handleDragEnd}>
             <div className="fixed inset-0 flex items-center justify-center">
                 <div className="max-w-4xl mx-auto flex flex-col gap-4 bg-black border border-white text-white p-4" style={{ width: '900px', height: '500px' }}>
-                {grid.map((dot) => (
-                            <GridDot
-                                key={dot.id}
-                                id={dot.id}
-                                x={dot.x}
-                                y={dot.y}
-                                state={dot.state}
-                            />
-                        ))}
+                    {grid.map((dot) => (
+                        <GridDot
+                            key={dot.id}
+                            id={dot.id}
+                            x={dot.x}
+                            y={dot.y}
+                            state={dot.state}
+                        />
+                    ))}
                 </div>
             </div>
-            {/*Toolbar */}
-            <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2">
-                <div className="max-w-4xl mx-auto flex flex-col gap-4 bg-black border border-white text-white p-4" style={{ width: '900px', height: '170px' }}>
-                    <div style={{ display: "flex", gap: "10px" }}>
-                        {states.map((state) => (
-                            <DraggableState
-                                key={state.id}
-                                id={state.id}
-                                label={state.label}
-                                color={state.color}
-                            />
-                        ))}
-                    </div>
-                </div>
-            </div>
+            {ToolBar}
         </DndContext>
 
     );
