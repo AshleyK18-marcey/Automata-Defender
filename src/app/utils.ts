@@ -30,8 +30,18 @@ export const generateGrid = (): GridDotProps[] => {
               x: startX + col * gridSpacing, // Calculate X position
               y: startY + row * gridSpacing, // Calculate Y position
               state: undefined,
+              edge: []
           });
       }
   }
   return grid;
 };
+
+export const generateUUID = (): string => {
+  // Generate a random UUID (v4-compliant)
+  return 'xxx4-xxxy-edge'.replace(/[xy]/g, function (char) {
+      const random = Math.random() * 16 | 0; // Random number between 0 and 15
+      const value = char === 'x' ? random : (random & 0x3 | 0x8); // Use specific bitmask for 'y'
+      return value.toString(16); // Convert to hexadecimal
+  });
+}

@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../CSS/fonts.module.css'
 import { useMachineStore } from '../MachineStore';
-import { CreateEdgeModalProps } from './Definitions';
+import { CreateEdgeModalProps, EdgeFactoryProps } from './Definitions';
+import { generateUUID } from '../utils';
 
-const CreateEdgeModal = ({onHide}: CreateEdgeModalProps) => {
+const CreateEdgeModal = ({ onHide }: CreateEdgeModalProps) => {
 
     const grid = useMachineStore((state) => state.grid);
+
+    const setEdges = useMachineStore((state) => state.setEdges);
+
+    const edges = useMachineStore((state) => state.edges);
+
+    const setGridEdges = useMachineStore((state) => state.setGridEdges);
 
     const alphabet = useMachineStore((state) => state.alphabet);
 
@@ -15,20 +22,25 @@ const CreateEdgeModal = ({onHide}: CreateEdgeModalProps) => {
 
     const [stateOptions, setStateOptions] = useState<string[]>([]);
 
+    const [error, setError] = useState<string | undefined>(undefined);
+
     const [isCreateDisabled, setIsCreateDisabled] = useState<boolean>(true);
 
     const handleSourceSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedSourceValue(event.target.value)
+        setError(undefined);
         handleIsCreateDisabled();
     };
 
     const handleTargetSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedTargetValue(event.target.value)
+        setError(undefined);
         handleIsCreateDisabled();
     };
 
     const handleLabelSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedLabelValue(event.target.value)
+        setError(undefined);
         handleIsCreateDisabled();
     };
 
@@ -41,16 +53,50 @@ const CreateEdgeModal = ({onHide}: CreateEdgeModalProps) => {
     }, [grid]);
 
     const handleIsCreateDisabled = () => {
-        if(selectedSourceValue !== 'default' && selectedTargetValue !== 'default' && selectedLabelValue !== 'default') {
+        console.log('here', selectedSourceValue, selectedTargetValue, selectedLabelValue);
+        if (selectedSourceValue !== 'default' && selectedTargetValue !== 'default' && selectedLabelValue !== 'default') {
             setIsCreateDisabled(false);
+            console.log("inside");
         }
     };
 
-    // TO DO: add logic to check if an edge alredy there and the source and target are reversed 
+
     const drawEdge = () => {
-        // support loops 
-        // stright edge
-        // double edge
+        console.log('clicked');
+        const sourceGrid = grid.find(dot => dot.state?.label === selectedSourceValue);
+        console.log(sourceGrid, 'sg');
+        console.log(grid);
+        const targetGrid = grid.find(dot => dot.state?.label === selectedTargetValue);
+        console.log(targetGrid, 'tg');
+        const edgeId = generateUUID();
+        console.log(edgeId, 'eid');
+        const newEdge: EdgeFactoryProps = {
+            sourceGrid,
+            targetGrid,
+            edgeLabel: selectedLabelValue,
+            edgeId
+        }
+
+        console.log(edges[0], newEdge);
+
+
+        const matchingEdges = edges.some(edge =>
+            edge.sourceGrid?.state?.label === newEdge.sourceGrid?.state?.label &&
+            edge.targetGrid?.state?.label === newEdge.targetGrid?.state?.label &&
+            edge.edgeLabel === newEdge.edgeLabel
+        );
+        if (matchingEdges) {
+            setError('Cannot create duplicate edges. Try again.')
+
+        }else {
+            setEdges(newEdge);
+            setGridEdges(sourceGrid, targetGrid, newEdge);
+        }
+
+        console.log(matchingEdges, 'matching edge');
+
+        console.log(newEdge, 'newEdge');
+        
 
     }
 
@@ -132,10 +178,13 @@ const CreateEdgeModal = ({onHide}: CreateEdgeModalProps) => {
                         </option>
                     ))}
                 </select>
-                <div style={{display: 'flex', justifyContent: 'space-between', margin:'20px'}}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', margin: '20px' }}>
                     <button onClick={onHide} className='px-6 py-3.5 text-base font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>Cancel</button>
-                    <button className='px-6 py-3.5 text-base font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' disabled={isCreateDisabled}>Create</button>
+                    <button onClick={drawEdge} className='px-6 py-3.5 text-base font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' disabled={false}>Create</button>
                 </div>
+                {error && <div className="bg-red-500 text-white p-4 text-center rounded-lg">
+                        {error}
+                    </div>}
             </div>
         </div>
     );

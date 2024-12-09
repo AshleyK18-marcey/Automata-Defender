@@ -4,7 +4,7 @@ import DraggableState from './Draggable';
 import { GridDotProps, State } from './Definitions';
 import StaticState from './StaticState';
 
-const GridDot = ({ id, x, y, state }: GridDotProps) => {
+const GridDot = ({ id, x, y, state, edge }: GridDotProps) => {
     const { isOver, setNodeRef } = useDroppable({
         id,
         data: {

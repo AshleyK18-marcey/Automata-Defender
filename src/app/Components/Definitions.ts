@@ -9,7 +9,8 @@ export type GridDotProps = {
     id: string,
     x: number,
     y: number,
-    state?: State
+    state?: State,
+    edge?: EdgeFactoryProps[]
 };
 
 export type DialogBoxProps = {
@@ -34,13 +35,31 @@ export type languageDefProps = {
 export type MachineStoreDef = {
     grid: GridDotProps[]
     states: State[],
+    edges: EdgeFactoryProps[],
     alphabet: string[],
     setAlphabet: (alpha: string[]) => void;
     resetMachine: () => void;
-    setGrid: (newGridState: State, gridId: string) => void;
+    setGridState: (newGridState: State, gridId: string) => void;
+    setGridEdges: (sourceGrid: GridDotProps | undefined, targetGrid: GridDotProps | undefined, newEdge:EdgeFactoryProps) => void;
     setStates: (stateId: string, isAccept: boolean, stateColor: string) => void;
+    setEdges: (newEdge: EdgeFactoryProps) => void;
+    removeEdge: (oldEdge: EdgeFactoryProps) => void;
 };
 
 export type CreateEdgeModalProps = {
     onHide: () => void;
 };
+
+export type EdgeFactoryProps= {
+    sourceGrid: GridDotProps | undefined,
+    targetGrid: GridDotProps | undefined,
+    edgeLabel: string,
+    edgeId: string
+}
+
+
+export enum EdgeType {
+    loop,
+    straight,
+    multiDirection 
+}

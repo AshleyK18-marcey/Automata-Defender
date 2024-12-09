@@ -5,6 +5,7 @@ import DraggableState from './Draggable';
 import { State, GridDotProps } from './Definitions';
 import CreateEdgeModal from './CreateEdgeModal';
 import { useMachineStore } from '../MachineStore';
+import EdgeFactory  from './EdgeFactory';
 
 const MachineDisplay = (): JSX.Element => {
 
@@ -14,9 +15,11 @@ const MachineDisplay = (): JSX.Element => {
 
     const resetmachine = useMachineStore((state) => state.resetMachine);
 
-    const setGrid = useMachineStore((state) => state.setGrid);
+    const setGridState = useMachineStore((state) => state.setGridState);
 
     const setStates = useMachineStore((state) => state.setStates);
+
+    const edges = useMachineStore((state) => state.edges);
 
     const [createEdgeOpen, setCreateEdgeOpen] = useState<boolean>(false);
 
@@ -59,7 +62,7 @@ const MachineDisplay = (): JSX.Element => {
                 color: event.active.data.current.color,
                 accept: event.active.data.current.accept
             }
-            setGrid(newGridState, event.over.id);
+            setGridState(newGridState, event.over.id);
             setStates(event.active.id, event.active.data.current.accept, event.active.data.current.color);
         }
     }
@@ -76,6 +79,16 @@ const MachineDisplay = (): JSX.Element => {
                             x={dot.x}
                             y={dot.y}
                             state={dot.state}
+                            edge={dot.edge}
+                        />
+                    ))}
+                    {edges.map((edge) => (
+                        <EdgeFactory
+                            key={edge.edgeId}
+                            sourceGrid={edge.sourceGrid}
+                            targetGrid={edge.targetGrid}
+                            edgeLabel={edge.edgeLabel}
+                            edgeId={edge.edgeId}
                         />
                     ))}
                 </div>
