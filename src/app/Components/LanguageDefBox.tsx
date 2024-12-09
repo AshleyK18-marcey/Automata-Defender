@@ -2,17 +2,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 
 import styles from '../CSS/fonts.module.css'
+import { languageDefProps } from './Definitions';
 
-type languageDefProps = {
-    languageDefinition: string;
-    
-};
 
 const LanguageDefBox = ({ languageDefinition }: languageDefProps): JSX.Element => {
-
-    //const [currentText, setCurrentText] = useState(""); // The text being displayed
-
-
 
     return (
         <div className="fixed top-0 w-full left-1/2 transform -translate-x-1/2 bg-black-900 text-white p-4">

@@ -2,9 +2,6 @@ import React, { useState, useEffect, useMemo, CSSProperties } from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import { State, GridDotProps } from './Definitions';
 
-
-
-
 const DraggableState = ({ id, label, color, accept }: State) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id,

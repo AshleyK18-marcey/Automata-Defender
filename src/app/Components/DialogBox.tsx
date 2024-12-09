@@ -2,12 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 
 import styles from '../CSS/fonts.module.css'
 
-type DialogBoxProps = {
-    dialog: string[];
-    nextPage: () => void;
-    width: string;
-    bottom: string;
-};
+import { DialogBoxProps } from './Definitions';
 
 const DialogBox = ({ dialog, nextPage, width, bottom }: DialogBoxProps): JSX.Element => {
 

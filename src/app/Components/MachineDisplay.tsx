@@ -3,38 +3,29 @@ import { DndContext } from '@dnd-kit/core';
 import GridDot from './GridDot';
 import DraggableState from './Draggable';
 import { State, GridDotProps } from './Definitions';
+import CreateEdgeModal from './CreateEdgeModal';
+import { useMachineStore } from '../MachineStore';
 
 const MachineDisplay = (): JSX.Element => {
 
-    const generateGrid = (): GridDotProps[] => {
-        const startX = 710;
-        const startY = 348;
-        const gridSpacing = 126;
-        const grid: GridDotProps[] = [];
-        for (let row = 0; row < 3; row++) {
-            for (let col = 0; col < 5; col++) {
-                grid.push({
-                    id: `${row}-${col}`, // Unique ID for each dot
-                    x: startX + col * gridSpacing, // Calculate X position
-                    y: startY + row * gridSpacing, // Calculate Y position
-                    state: undefined,
-                });
-            }
-        }
-        return grid;
+    const grid = useMachineStore((state) => state.grid);
+
+    const states = useMachineStore((state) => state.states);
+
+    const resetmachine = useMachineStore((state) => state.resetMachine);
+
+    const setGrid = useMachineStore((state) => state.setGrid);
+
+    const setStates = useMachineStore((state) => state.setStates);
+
+    const [createEdgeOpen, setCreateEdgeOpen] = useState<boolean>(false);
+
+    const hideCreateEdgeModal = () => {
+        setCreateEdgeOpen(false);
     };
 
-    const [states, setState] = useState<State[]>([
-        { id: 'state-1', label: 'q1', color: 'blue', accept: false },
-        { id: 'accept-1', label: 'accept-1', color: 'green', accept: true }
-    ]);
 
-    const [grid, setGrid] = useState<GridDotProps[]>([
-        { id: '0', x: 570, y: 474, state: { id: '0', label: 'Start', color: 'blue', accept: false } },
-        ...generateGrid()
-    ]);
-
-
+    // Tool bar cant be its own component because it messes with the drag and drop
     const ToolBar: JSX.Element = (
         <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2">
             <div className="max-w-4xl mx-auto flex flex-col gap-4 bg-black border border-white text-white p-4" style={{ width: '900px', height: '170px' }}>
@@ -48,47 +39,28 @@ const MachineDisplay = (): JSX.Element => {
                             accept={state.accept}
                         />
                     ))}
+                    <div style={{ display: 'block' }}>
+                        <button onClick={() => setCreateEdgeOpen(true)} className=" bg-black border border-white hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full" style={{ width: '200px', height: '50px', position: 'absolute', right: '20px', top: '20px' }}>
+                            Create Edge
+                        </button>
+                        <button onClick={resetmachine} className=" bg-black border border-white hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full" style={{ width: '200px', height: '50px', position: 'absolute', right: '20px', bottom: '20px' }}>
+                            Reset 
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>);
 
     const handleDragEnd = (event: any) => {
         if (event.over && !event.over.disabled) {
-            console.log(event.active.id, event.active.data.current.label, event.over.id);
             const newGridState: State = {
                 id: event.active.id,
                 label: event.active.data.current.label,
                 color: event.active.data.current.color,
                 accept: event.active.data.current.accept
             }
-            setGrid((prevGrid) => prevGrid.map((dot) => dot.id === event.over.id ? { ...dot, state: newGridState } : dot));
-
-            setState((prevStates) => {
-                // Remove the dragged state
-                const filteredStates = prevStates.filter(
-                    (state) => state.id !== event.active.id
-                );
-
-                const oldId = parseInt(event.active.id.split('-')[1]);
-                const oldAccept = event.active.data.current.accept;
-                const oldColor = event.active.data.current.color;
-
-                const newId = `state-${oldId + 1}`;
-                const newLabel = oldAccept ? `accept-${oldId + 1}` : `q${oldId + 1}`;
-
-                // Add the new state
-                const newState: State = {
-                    id: newId,
-                    label: newLabel,
-                    color: oldColor,
-                    accept: oldAccept,
-                };
-
-                const sort = oldAccept ? [...filteredStates, newState] : [newState, ...filteredStates];
-
-                return sort;
-            });
-            console.log(states);
+            setGrid(newGridState, event.over.id);
+            setStates(event.active.id, event.active.data.current.accept, event.active.data.current.color);
         }
     }
 
@@ -109,6 +81,7 @@ const MachineDisplay = (): JSX.Element => {
                 </div>
             </div>
             {ToolBar}
+            {createEdgeOpen && <CreateEdgeModal onHide={hideCreateEdgeModal} />}
         </DndContext>
 
     );

@@ -8,6 +8,8 @@ import ReadyButton from '../Components/ReadyButton';
 import MachineDisplay from '../Components/MachineDisplay';
 import Toolbar from '../Components/Draggable';
 import { DndContext } from '@dnd-kit/core';
+import { useMachineStore } from '../MachineStore';
+import { useEffect } from 'react';
 
 export default function Tutorial() {
 
@@ -17,6 +19,13 @@ export default function Tutorial() {
     }
 
     const language = generateLanguage('easy');
+
+    const setAlphabet = useMachineStore((state) => state.setAlphabet);
+
+    useEffect(() => {
+        // TO DO: extract this from the defined language 
+        setAlphabet(['0','1', '0, 1']);
+    }, []);
 
     const dialogTexts: string[] = ["You can see our friendly agent code at the top of your screen. This describes what qualities of a message you should accept on.",
         "In the middle of your screen is where you will build your machine. The heart of the communication center is on the right. This is where all accepted messages go.",

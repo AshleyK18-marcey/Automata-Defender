@@ -3,13 +3,8 @@ import Image from 'next/image';
 
 import styles from '../CSS/fonts.module.css'
 import DialogBox from './DialogBox';
+import { characterAreaProps } from './Definitions';
 
-type characterAreaProps = {
-    character: string;
-    dialog: string[];
-    nextPage: () => void;
-    
-};
 
 const CharacterArea = ({ character, dialog, nextPage }: characterAreaProps): JSX.Element => {
 

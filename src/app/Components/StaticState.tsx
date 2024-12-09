@@ -1,9 +1,6 @@
 import React from 'react';
 import { State } from './Definitions';
 
-
-
-
 const StaticState = ({ id, label, color, accept}: State) => {
 
     const style = {

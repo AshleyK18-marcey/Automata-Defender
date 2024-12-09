@@ -1,3 +1,5 @@
+import { GridDotProps } from "./Components/Definitions";
+
 export const generateNumbers = (count = 100) => {
   return Array(count)
     .fill(0)
@@ -16,6 +18,20 @@ export const generateLanguage = (difficulty: string): string => {
   return 'none';
 }
 
-export const ItemTypes = {
-  STATE: 'state',
+export const generateGrid = (): GridDotProps[] => {
+  const startX = 710;
+  const startY = 348;
+  const gridSpacing = 126;
+  const grid: GridDotProps[] = [];
+  for (let row = 0; row < 3; row++) {
+      for (let col = 0; col < 5; col++) {
+          grid.push({
+              id: `${row}-${col}`, // Unique ID for each dot
+              x: startX + col * gridSpacing, // Calculate X position
+              y: startY + row * gridSpacing, // Calculate Y position
+              state: undefined,
+          });
+      }
+  }
+  return grid;
 };
