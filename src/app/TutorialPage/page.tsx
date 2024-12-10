@@ -27,13 +27,16 @@ export default function Tutorial() {
         setAlphabet(['0','1', '0, 1']);
     }, []);
 
-    const dialogTexts: string[] = ["You can see our friendly agent code at the top of your screen. This describes what qualities of a message you should accept on.",
-        "In the middle of your screen is where you will build your machine. The heart of the communication center is on the right. This is where all accepted messages go.",
-        "If a corrupted message gets through your machine it will destroy the communication center and you'll have to start over!",
-        "At the bottom is your tool box where you can drag and drop states into the middle to build your machine.",
-        "Then you can click a state and drag to the state you would like to connect it to. This will create an edge that you must label correctly according to the code above.",
-        "Once you are finished creating you machine, click the button on the bottom right that says Ready!"
+    const dialogTexts: string[] = [
+        "At the top of your screen, you'll find the agent code. This outlines the qualities of messages your machine should accept.",
+        "The center of the screen is where you'll build your machine. On the right is the communication center, where accepted messages are processed.",
+        "Beware! If a corrupted message gets through your machine, it will destroy the communication center, and you'll need to start over.",
+        "Your toolbox is at the bottom. Drag and drop states into the center to start building your machine.",
+        "To connect states, use the Create Edge button. Select the source state, the target state, and the input that triggers the transition.",
+        "If you make a mistake, use the Reset button in the toolbox to start over.",
+        "When your machine is ready, click the 'Ready' button at the bottom right to submit your creation."
     ];
+    
     return (
         <DndContext>
             <main className="min-h-screen bg-[url('/tut-background.avif')] bg-cover bg-center bg-no-repeat">

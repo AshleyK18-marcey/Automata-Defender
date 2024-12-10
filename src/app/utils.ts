@@ -8,7 +8,8 @@ export const generateNumbers = (count = 100) => {
 };
 
 export const generateLanguage = (difficulty: string): string => {
-  const easyLang = ['{w \u2208 {0,1}| every odd position of w is a 1}', '{w \u2208 {0,1} | w does not contain consective 0s}']
+  const easyLang = ['{w \u2208 {0,1}| each 1 in w is immediately preceded and immediately followed by a 0 }']
+  /*
   switch(difficulty){
     case 'easy' :
       const index = Math.floor(Math.random() * 2)
@@ -16,12 +17,14 @@ export const generateLanguage = (difficulty: string): string => {
       break;
   }
   return 'none';
+  */
+ return easyLang[0];
 }
 
 export const generateGrid = (boxLeft: number, boxTop: number): GridDotProps[] => {
   const gridSpacing = 126; // Spacing between grid dots
   const rows = 3;          // Number of rows
-  const cols = 5;          // Number of columns
+  const cols = 6;          // Number of columns
 
   const grid: GridDotProps[] = [];
   for (let row = 0; row < rows; row++) {

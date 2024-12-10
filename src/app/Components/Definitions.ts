@@ -18,6 +18,8 @@ export type DialogBoxProps = {
     nextPage: () => void;
     width: string;
     bottom: string;
+    left?: string;
+    fontSize?: string;
 };
 
 export type characterAreaProps = {

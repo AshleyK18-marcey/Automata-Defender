@@ -11,9 +11,9 @@ const CharacterArea = ({ character, dialog, nextPage }: characterAreaProps): JSX
     return (
         <div className="fixed top-0 left-0 h-full w-1/4 bg-black-800 text-white p-4 flex flex-col items-center justify-center">
             <div className="fixed top-0 w-full left-1/2 transform -translate-x-1/2">
-                <Image src={character} alt='character' width={400} height={400}></Image>
+                <Image src={character} alt='character' width={300} height={200}></Image>
             </div>
-            <DialogBox dialog={dialog} nextPage={nextPage} width='w-1/4' bottom='bottom-0'></DialogBox>
+            <DialogBox dialog={dialog} nextPage={nextPage} width='w-1/5' bottom='bottom-0' left='left-0' fontSize='16'></DialogBox>
             
         </div>
     );

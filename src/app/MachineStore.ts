@@ -4,8 +4,8 @@ import { generateGrid } from './utils';
 
 
 export const useMachineStore = create<MachineStoreDef>()((set, get) => ({
-    grid: [{ id: '0', x: 60, y: 251, state: { id: '0', label: 'Start', color: 'blue', accept: false }, edge: [] },
-    ...generateGrid(215,125)],
+    grid: [{ id: '0', x:40, y: 191, state: { id: '0', label: 'Start', color: 'blue', accept: false }, edge: [] },
+    ...generateGrid(150,65)],
     states: [
         { id: 'state-1', label: 'q1', color: 'blue', accept: false },
         { id: 'accept-1', label: 'accept-1', color: 'green', accept: true }
@@ -19,8 +19,8 @@ export const useMachineStore = create<MachineStoreDef>()((set, get) => ({
     resetMachine: () => {
         // To Do: Theres a bug when you drop an accept state and then a normal state and then reset
         set((prevState) => {
-            const resetGrid = [{ id: '0', x: 60, y: 251, state: { id: '0', label: 'Start', color: 'blue', accept: false }, edge: [] },
-            ...generateGrid(215,125)];
+            const resetGrid = [{ id: '0', x: 40, y: 191, state: { id: '0', label: 'Start', color: 'blue', accept: false }, edge: [] },
+            ...generateGrid(150,65)];
             const resetStates = [
                 { id: 'state-1', label: 'q1', color: 'blue', accept: false },
                 { id: 'accept-1', label: 'accept-1', color: 'green', accept: true }
@@ -45,10 +45,7 @@ export const useMachineStore = create<MachineStoreDef>()((set, get) => ({
                 if (dot.id === sourceGrid?.id) {
                     // Add the new edge to the source grid
                     return { ...dot, edge: [...(dot.edge || []), newEdge] };
-                } else if (dot.id === targetGrid?.id) {
-                    // Add the new edge to the target grid (reverse connection)
-                    return { ...dot, edge: [...(dot.edge || []), newEdge] };
-                }
+                } 
                 return dot; // No change for other grid dots
             });
             console.log(updatedGrid);

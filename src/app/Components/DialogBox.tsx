@@ -4,7 +4,7 @@ import styles from '../CSS/fonts.module.css'
 
 import { DialogBoxProps } from './Definitions';
 
-const DialogBox = ({ dialog, nextPage, width, bottom }: DialogBoxProps): JSX.Element => {
+const DialogBox = ({ dialog, nextPage, width, bottom, left, fontSize }: DialogBoxProps): JSX.Element => {
 
     const [currentText, setCurrentText] = useState(""); // The text being displayed
     const [dialogIndex, setDialogIndex] = useState(-1); // Tracks which dialog we're on
@@ -49,9 +49,9 @@ const DialogBox = ({ dialog, nextPage, width, bottom }: DialogBoxProps): JSX.Ele
     const buttonText = dialogIndex == -1 ? 'Begin' : 'Continue';
 
     return (
-        <div className={`fixed ${bottom} ${width} bg-black-900 text-white p-4`}>
+        <div className={`fixed ${bottom} ${width} ${left} bg-black-900 text-white p-4`}>
             <div className="max-w-4xl mx-auto flex flex-col gap-4 bg-black border border-white text-white p-4 silkScreen">
-                <p className={styles.silkScreen}>{currentText}</p>
+                <p className={styles.silkScreen} style={{fontSize:`${fontSize}px`}}>{currentText}</p>
                 <button
                     onClick={(dialogIndex == -2) ? nextPage : handleNextDialog}
                     className={`self-end bg-black-600 hover:bg-gray-700 text-white px-4 py-2 rounded ${

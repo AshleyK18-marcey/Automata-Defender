@@ -19,8 +19,6 @@ const MachineDisplay = (): JSX.Element => {
 
     const setStates = useMachineStore((state) => state.setStates);
 
-    const edges = useMachineStore((state) => state.edges);
-
     const [createEdgeOpen, setCreateEdgeOpen] = useState<boolean>(false);
 
     const hideCreateEdgeModal = () => {
@@ -31,7 +29,7 @@ const MachineDisplay = (): JSX.Element => {
     // Tool bar cant be its own component because it messes with the drag and drop
     const ToolBar: JSX.Element = (
         <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2">
-            <div className="max-w-4xl mx-auto flex flex-col gap-4 bg-black border border-white text-white p-4" style={{ width: '900px', height: '170px' }}>
+            <div className="max-w-4xl mx-auto flex flex-col gap-4 bg-black border border-white text-white p-4" style={{ width: '900px' }}>
                 <div style={{ display: "flex", gap: "10px", alignItems: "center", justifyContent: "center", height: "100%" }}>
                     {states.map((state) => (
                         <DraggableState
@@ -43,10 +41,10 @@ const MachineDisplay = (): JSX.Element => {
                         />
                     ))}
                     <div style={{ display: 'block' }}>
-                        <button onClick={() => setCreateEdgeOpen(true)} className=" bg-black border border-white hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full" style={{ width: '200px', height: '50px', position: 'absolute', right: '20px', top: '20px' }}>
+                        <button onClick={() => setCreateEdgeOpen(true)} className=" bg-black border border-white hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" style={{ width: '200px', height: '40px', position: 'absolute', right: '20px', top: '10px' }}>
                             Create Edge
                         </button>
-                        <button onClick={resetmachine} className=" bg-black border border-white hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full" style={{ width: '200px', height: '50px', position: 'absolute', right: '20px', bottom: '20px' }}>
+                        <button onClick={resetmachine} className=" bg-black border border-white hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" style={{ width: '200px', height: '40px', position: 'absolute', right: '20px', bottom: '10px' }}>
                             Reset 
                         </button>
                     </div>

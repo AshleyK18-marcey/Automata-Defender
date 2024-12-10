@@ -5,8 +5,8 @@ const StaticState = ({ id, label, color, accept}: State) => {
 
     const style = {
         backgroundColor: color,
-        width: '50px',
-        height: '50px',
+        width: '40px',
+        height: '40px',
         borderRadius: '50%',
         display: 'flex',
         alignItems: 'center',
@@ -19,15 +19,15 @@ const StaticState = ({ id, label, color, accept}: State) => {
        ...style,
         width: '40px',
         height: '40px',
-        border: '10px solid red'
+        border: '5px solid white'
     };
 
     const triangle = {
         width: '0',
 	    height: '0',
-	    borderTop: '25px solid transparent',
-	    borderLeft: '25px solid #fff',
-	    borderBottom: '25px solid transparent',
+	    borderTop: '10px solid transparent',
+	    borderLeft: '10px solid #fff',
+	    borderBottom: '10px solid transparent',
         marginRight: "10px", // Spacing between the triangle and the circle
     }
 

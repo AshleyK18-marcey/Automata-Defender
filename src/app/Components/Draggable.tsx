@@ -13,8 +13,8 @@ const DraggableState = ({ id, label, color, accept }: State) => {
       ? `translate(${transform.x}px, ${transform.y}px)`
       : undefined,
     backgroundColor: color,
-    width: '100px',
-    height: '100px',
+    width: '75px',
+    height: '75px',
     borderRadius: '50%',
     display: 'flex',
     alignItems: 'center',
@@ -25,7 +25,7 @@ const DraggableState = ({ id, label, color, accept }: State) => {
   };
 
   const acceptStyle = {
-    ...style, border: '10px solid red'
+    ...style, border: '5px solid white'
   };
 
 
