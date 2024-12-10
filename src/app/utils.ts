@@ -18,19 +18,20 @@ export const generateLanguage = (difficulty: string): string => {
   return 'none';
 }
 
-export const generateGrid = (): GridDotProps[] => {
-  const startX = 710;
-  const startY = 348;
-  const gridSpacing = 126;
+export const generateGrid = (boxLeft: number, boxTop: number): GridDotProps[] => {
+  const gridSpacing = 126; // Spacing between grid dots
+  const rows = 3;          // Number of rows
+  const cols = 5;          // Number of columns
+
   const grid: GridDotProps[] = [];
-  for (let row = 0; row < 3; row++) {
-      for (let col = 0; col < 5; col++) {
+  for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
           grid.push({
               id: `${row}-${col}`, // Unique ID for each dot
-              x: startX + col * gridSpacing, // Calculate X position
-              y: startY + row * gridSpacing, // Calculate Y position
+              x: boxLeft + col * gridSpacing, // X relative to the box
+              y: boxTop + row * gridSpacing, // Y relative to the box
               state: undefined,
-              edge: []
+              edge: [],
           });
       }
   }
@@ -44,4 +45,8 @@ export const generateUUID = (): string => {
       const value = char === 'x' ? random : (random & 0x3 | 0x8); // Use specific bitmask for 'y'
       return value.toString(16); // Convert to hexadecimal
   });
+}
+
+export const isWithinThreshold = (x: number, y: number, threshold: number) =>{
+  return Math.abs(x - y) === threshold;
 }

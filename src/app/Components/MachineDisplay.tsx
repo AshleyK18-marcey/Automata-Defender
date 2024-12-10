@@ -71,7 +71,7 @@ const MachineDisplay = (): JSX.Element => {
     return (
         <DndContext onDragEnd={handleDragEnd}>
             <div className="fixed inset-0 flex items-center justify-center">
-                <div className="max-w-4xl mx-auto flex flex-col gap-4 bg-black border border-white text-white p-4" style={{ width: '900px', height: '500px' }}>
+                <div className="max-w-4xl mx-auto flex flex-col gap-4 bg-black border border-white text-white p-4" style={{ width: '80%', height: '55vh', position: 'relative' }}>
                     {grid.map((dot) => (
                         <GridDot
                             key={dot.id}
@@ -80,15 +80,6 @@ const MachineDisplay = (): JSX.Element => {
                             y={dot.y}
                             state={dot.state}
                             edge={dot.edge}
-                        />
-                    ))}
-                    {edges.map((edge) => (
-                        <EdgeFactory
-                            key={edge.edgeId}
-                            sourceGrid={edge.sourceGrid}
-                            targetGrid={edge.targetGrid}
-                            edgeLabel={edge.edgeLabel}
-                            edgeId={edge.edgeId}
                         />
                     ))}
                 </div>

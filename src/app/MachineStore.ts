@@ -4,8 +4,8 @@ import { generateGrid } from './utils';
 
 
 export const useMachineStore = create<MachineStoreDef>()((set, get) => ({
-    grid: [{ id: '0', x: 570, y: 474, state: { id: '0', label: 'Start', color: 'blue', accept: false }, edge: [] },
-    ...generateGrid()],
+    grid: [{ id: '0', x: 60, y: 251, state: { id: '0', label: 'Start', color: 'blue', accept: false }, edge: [] },
+    ...generateGrid(215,125)],
     states: [
         { id: 'state-1', label: 'q1', color: 'blue', accept: false },
         { id: 'accept-1', label: 'accept-1', color: 'green', accept: true }
@@ -19,8 +19,8 @@ export const useMachineStore = create<MachineStoreDef>()((set, get) => ({
     resetMachine: () => {
         // To Do: Theres a bug when you drop an accept state and then a normal state and then reset
         set((prevState) => {
-            const resetGrid = [{ id: '0', x: 570, y: 474, state: { id: '0', label: 'Start', color: 'blue', accept: false }, edge: [] },
-            ...generateGrid()];
+            const resetGrid = [{ id: '0', x: 60, y: 251, state: { id: '0', label: 'Start', color: 'blue', accept: false }, edge: [] },
+            ...generateGrid(215,125)];
             const resetStates = [
                 { id: 'state-1', label: 'q1', color: 'blue', accept: false },
                 { id: 'accept-1', label: 'accept-1', color: 'green', accept: true }

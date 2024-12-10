@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { EdgeType, EdgeFactoryProps } from './Definitions';
+import { EdgeType, EdgeFactoryProps, GridDotProps } from './Definitions';
 import { useMachineStore } from '../MachineStore';
+import { isWithinThreshold } from '../utils';
 
 
 const EdgeFactory = ({ sourceGrid, targetGrid, edgeLabel }: EdgeFactoryProps): JSX.Element => {
-    const removeEdge = useMachineStore((state) => state.removeEdge); 
+    const removeEdge = useMachineStore((state) => state.removeEdge);
     const rightTriangle = {
         width: '0',
         height: '0',
@@ -38,30 +39,69 @@ const EdgeFactory = ({ sourceGrid, targetGrid, edgeLabel }: EdgeFactoryProps): J
         const target = targetGrid?.state?.label;
         console.log('target', target);
 
-        if(source === target) {
+        if (source === target) {
             console.log('s = t');
             setEdgeType(EdgeType.loop);
         }
-        else if(sourceGrid?.edge){
+        else if (sourceGrid?.edge) {
             console.log('multi logic');
             const targetToSourceEdge = sourceGrid.edge.find(e => e.sourceGrid?.state?.label === target && e.targetGrid?.state?.label === source);
             console.log(targetToSourceEdge);
-            if(targetToSourceEdge){
+            if (targetToSourceEdge) {
                 removeEdge(targetToSourceEdge);
                 console.log('inside if', targetToSourceEdge);
                 setEdgeType(EdgeType.multiDirection);
                 setOtherEdgeLabel(targetToSourceEdge.edgeLabel)
             }
         }
-        console.log(edgeType);
+
+        calculateEdgeProperties(sourceGrid, targetGrid);
     }, []);
 
     useEffect(() => {
         renderEdge();
-    }, [edgeType]);
+    }, [edgeType, x, y, width]);
+
+    const calculateEdgeProperties = (source: GridDotProps | undefined, target: GridDotProps | undefined) => {
+        if (source && target) {
+            if (source === target) {
+                setX((source.x).toString());
+                setY((source.y - 110).toString());
+            } else {
+                // Destructure coordinates
+                const { x: x1, y: y1 } = source;
+                const { x: x2, y: y2 } = target;
+                console.log(x1, 'HEY');
+
+                console.log('Calculating properties for edge:', { x1, y1, x2, y2 });
+
+                console.log(isWithinThreshold(x1, x2, 126));
+                console.log(isWithinThreshold(y1, y2, 126));
+
+                if (isWithinThreshold(x1, x2, 126) && isWithinThreshold(y1, y2, 126)) {
+                    console.log('Diagonal edge');
+                    setWidth('61')
+                    setX((x1 + 89).toString());
+                    setY((y1).toString());
+
+                } else if ((isWithinThreshold(x1, x2, 126) && y1 === y2) || (isWithinThreshold(x1, x2, 155) && y1 === y2) || (isWithinThreshold(y1, y2, 126) && x1 === x2)) {
+                    console.log('Straight edge');
+                    setWidth('50');
+                    const minx = Math.min(x1,x2);
+                    const miny = Math.min(y1,y2);
+                    setX((minx).toString());
+                    setY(((miny)).toString());
+                }
+
+
+            }
+
+
+        }
+    };
 
     const straightArrow = (
-        <div style={{ display: 'block', width: 'fit-content', position: 'relative' }}>
+        <div style={{ display: 'block', width: 'fit-content', position: 'absolute', left: `${x}px`, top: `${y}px`,  transform: 'translate(50%, -50%)' }}>
             <p style={{
                 position: 'absolute',
                 left: '50%',
@@ -69,7 +109,7 @@ const EdgeFactory = ({ sourceGrid, targetGrid, edgeLabel }: EdgeFactoryProps): J
                 padding: '0 5px',   // Optional: padding for text spacing
             }}>{edgeLabel}</p>
             <div style={{ display: 'flex', width: 'fit-content' }}>
-                <hr style={{ width: '100px', border: '2px solid white', marginTop: '12px' }} />
+                <hr style={{ width: `${width}px`, border: '2px solid white', marginTop: '12px' }} />
                 <div style={rightTriangle}></div>
             </div>
         </div>
@@ -78,7 +118,7 @@ const EdgeFactory = ({ sourceGrid, targetGrid, edgeLabel }: EdgeFactoryProps): J
     );
 
     const loopArrow = (
-        <div style={{ position: 'relative', left: '685px', top: '290px', width: 'fit-content' }}>
+        <div style={{ position: 'absolute', left: `${x}px`, top: `${y}px`, width: 'fit-content', transform: 'translate(-50%)' }}>
             <div style={{ display: 'block' }}>
                 <p>{edgeLabel}</p>
                 <Image src={'/Loop.png'} alt='character' width={80} height={50}></Image>
@@ -88,7 +128,7 @@ const EdgeFactory = ({ sourceGrid, targetGrid, edgeLabel }: EdgeFactoryProps): J
     );
 
     const multiArrow = (
-        <div style={{ display: 'block', width: 'fit-content', position: 'relative' }}>
+        <div style={{ display: 'block', width: 'fit-content', position: 'absolute', left: `${x}px`, top: `${y}px`, transform: 'translate(50%, -50%)' }}>
             <p style={{
                 position: 'absolute',
                 left: '50%',
@@ -97,11 +137,11 @@ const EdgeFactory = ({ sourceGrid, targetGrid, edgeLabel }: EdgeFactoryProps): J
             }}>{edgeLabel}</p>
 
             <div style={{ display: 'flex', width: 'fit-content' }}>
-                <hr style={{ width: '100px', border: '2px solid white', marginTop: '12px' }} />
+                <hr style={{ width: `${width}px`, border: '2px solid white', marginTop: '12px' }} />
                 <div style={rightTriangle}></div>
             </div><div style={{ display: 'flex', width: 'fit-content' }}>
                 <div style={leftTriangle}></div>
-                <hr style={{ width: '100px', border: '2px solid white', marginTop: '12px' }} />
+                <hr style={{ width: `${width}px`, border: '2px solid white', marginTop: '12px' }} />
             </div>
             <p style={{
                 position: 'absolute',
@@ -113,7 +153,7 @@ const EdgeFactory = ({ sourceGrid, targetGrid, edgeLabel }: EdgeFactoryProps): J
     )
 
     const renderEdge = () => {
-        console.log(edgeType, 'ahhhh');
+        console.log(x, y, '@@@');
         switch (edgeType) {
             case EdgeType.loop:
                 setRender(loopArrow);
